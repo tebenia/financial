@@ -1,0 +1,20 @@
+# Local private material. Keep the directory and everything under it off GitHub.
+/private/
+
+# Local secrets and environment overrides.
+.env
+.env.*
+!.env.example
+
+# macOS and Python/Jupyter generated files.
+.DS_Store
+**/.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Local virtual environments and caches.
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
