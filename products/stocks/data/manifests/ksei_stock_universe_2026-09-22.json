@@ -1,0 +1,22 @@
+{
+  "snapshot_date": "2026-09-22",
+  "retrieved_at_utc": "2026-09-22T00:46:23.298883+00:00",
+  "source_name": "KSEI Registered Securities - Shares",
+  "source_url": "https://web.ksei.co.id/services/registered-securities/shares?setLocale=en-US",
+  "source_authority": "PT Kustodian Sentral Efek Indonesia (KSEI)",
+  "raw_registry_file": "products/stocks/data/raw/ksei_registered_shares_2026-09-22.html",
+  "raw_registry_sha256": "513342d89ec48c609259d46e25910161428d3e084bad03276e3061f597feda19",
+  "complete_registry_csv": "products/stocks/data/processed/ksei_registered_share_securities_2026-09-22.csv",
+  "registered_security_count": 984,
+  "standard_four_letter_ticker_count": 980,
+  "detail_enrichment_status": "not_attempted_registry_only",
+  "idx_listed_company_reference_count": 962,
+  "idx_listed_company_reference_period": "2026-07",
+  "idx_listed_company_reference_url": "https://www2.idx.co.id/en/market-data/statistical-reports/digital-statistic/monthly/idx-trading-activities/indonesia-stock-exchange-activities?filter=eyJ5ZWFyIjoiMjAyNiIsIm1vbnRoIjoiNyIsInF1YXJ0ZXIiOjAsInR5cGUiOiJtb250aGx5In0%3D",
+  "units": "one row per KSEI registered share security code",
+  "currency": "nominal values are IDR on the source table",
+  "timezone": "source page does not state a timezone; retrieval timestamp is UTC",
+  "revision_or_vintage": "2026-09-22",
+  "license": "No reusable-data license identified on the source page; retained for research provenance",
+  "scope_warning": "KSEI registered share securities are not identical to IDX listed companies. The registry may include special classes, preferred shares, and securities whose current exchange/status must be checked on their KSEI detail pages."
+}

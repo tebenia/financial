@@ -11,7 +11,7 @@ stocks, bonds, funds, and cash.
 | `bonds_and_sukuk/` | `02_bonds_and_sukuk_universe.ipynb` | ORI, SBR, SR, ST, FR, PBS, and corporate debt categories |
 | `mutual_funds/` | `03_mutual_funds_universe.ipynb` | Money-market, bond, equity, mixed, index, and sharia examples |
 | `etfs/` | `04_indonesia_etf_universe.ipynb` | Indonesian ETF names/tickers and liquidity checks |
-| `stocks/` | `05_indonesia_stock_universe.ipynb` | Indonesian company names grouped by sector and business field |
+| `stocks/` | `05_indonesia_stock_universe.ipynb` | Complete KSEI registered-share snapshot plus a curated Indonesian company learning universe |
 | `gold/` | `06_gold_product_map.ipynb` | Physical and custodied gold formats and their real costs |
 | `property_and_funds/` | `07_property_reits_and_infrastructure.ipynb` | DIRE, DINFRA, property shares, and direct property |
 | `crypto_assets/` | `08_crypto_asset_map.ipynb` | High-risk crypto categories, custody, and regulatory checks |
@@ -40,3 +40,15 @@ The builder keeps the starter universes inspectable and reproducible. Later,
 live or downloaded data should be saved with source URL, retrieval timestamp,
 release/effective date, period, units, currency, timezone, revision/vintage,
 licence, file hash, and notes.
+
+The stock master snapshot has a separate acquisition command:
+
+```bash
+python3 scripts/fetch_ksei_stock_universe.py \
+  --as-of YYYY-MM-DD \
+  --registry-only
+```
+
+KSEI registered share securities and IDX listed companies are related but not
+identical populations. The stock notebook and its manifest preserve that scope
+difference rather than silently treating the counts as interchangeable.
