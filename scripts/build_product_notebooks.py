@@ -226,3 +226,13 @@ write_book("crypto_assets", "08_crypto_asset_map.ipynb", [
 ])
 
 print("Built 8 product notebooks under", PRODUCTS)
+
+# Keep the richer, source-driven stock notebook authoritative after the general
+# product scaffold has written its starter version.
+exec(
+    compile(
+        (ROOT / "scripts/build_stock_universe_notebook.py").read_text(encoding="utf-8"),
+        "scripts/build_stock_universe_notebook.py",
+        "exec",
+    )
+)

@@ -151,6 +151,11 @@ def main() -> None:
         action="store_true",
         help="Parse an existing dated raw registry snapshot without downloading it again",
     )
+    parser.add_argument(
+        "--resume-details",
+        action="store_true",
+        help="Reuse successfully parsed details from the dated JSON and fetch only missing codes",
+    )
     args = parser.parse_args()
 
     datetime.strptime(args.as_of, "%Y-%m-%d")
@@ -229,13 +234,21 @@ def main() -> None:
         )
         return
 
+    details_path = raw_dir / f"ksei_share_details_{args.as_of}.json"
     details: list[dict[str, Any]] = []
+    if args.resume_details and details_path.exists():
+        loaded = json.loads(details_path.read_text(encoding="utf-8"))
+        if not isinstance(loaded, list):
+            raise ValueError(f"Expected a list in {details_path}")
+        details = loaded
+    completed_codes = {str(row["ticker"]) for row in details}
+    remaining_codes = [code for code in registry["ticker"] if code not in completed_codes]
     errors: list[dict[str, str]] = []
-    total = len(registry)
+    total = len(remaining_codes)
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {
             executor.submit(fetch_detail, code, args.timeout, retrieved_at): code
-            for code in registry["ticker"]
+            for code in remaining_codes
         }
         for completed, future in enumerate(concurrent.futures.as_completed(futures), start=1):
             code = futures[future]
@@ -243,11 +256,18 @@ def main() -> None:
                 details.append(future.result())
             except Exception as exc:  # retain all failures in the manifest
                 errors.append({"ticker": code, "error": str(exc)})
-            if completed % 50 == 0 or completed == total:
-                print(f"details {completed}/{total}; errors={len(errors)}", flush=True)
+            if completed % 25 == 0 or completed == total:
+                details.sort(key=lambda row: row["ticker"])
+                details_path.write_text(
+                    json.dumps(details, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+                print(
+                    f"details {completed}/{total}; retained={len(details)}; errors={len(errors)}",
+                    flush=True,
+                )
 
     details.sort(key=lambda row: row["ticker"])
-    details_path = raw_dir / f"ksei_share_details_{args.as_of}.json"
     details_path.write_text(
         json.dumps(details, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )

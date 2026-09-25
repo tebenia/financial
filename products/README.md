@@ -11,7 +11,7 @@ stocks, bonds, funds, and cash.
 | `bonds_and_sukuk/` | `02_bonds_and_sukuk_universe.ipynb` | ORI, SBR, SR, ST, FR, PBS, and corporate debt categories |
 | `mutual_funds/` | `03_mutual_funds_universe.ipynb` | Money-market, bond, equity, mixed, index, and sharia examples |
 | `etfs/` | `04_indonesia_etf_universe.ipynb` | Indonesian ETF names/tickers and liquidity checks |
-| `stocks/` | `05_indonesia_stock_universe.ipynb` | Complete KSEI registered-share snapshot plus a curated Indonesian company learning universe |
+| `stocks/` | `05_indonesia_stock_universe.ipynb`; `06_industry_market_cap_tables.ipynb`; `07_indonesia_banking_sector_overview.ipynb`; `08_bank_quarterly_progress.ipynb` | Complete KSEI registered-share snapshot, market-cap-sorted industry tables, banking-market overview, and current quarterly bank-progress analysis |
 | `gold/` | `06_gold_product_map.ipynb` | Physical and custodied gold formats and their real costs |
 | `property_and_funds/` | `07_property_reits_and_infrastructure.ipynb` | DIRE, DINFRA, property shares, and direct property |
 | `crypto_assets/` | `08_crypto_asset_map.ipynb` | High-risk crypto categories, custody, and regulatory checks |
@@ -52,3 +52,24 @@ python3 scripts/fetch_ksei_stock_universe.py \
 KSEI registered share securities and IDX listed companies are related but not
 identical populations. The stock notebook and its manifest preserve that scope
 difference rather than silently treating the counts as interchangeable.
+
+After refreshing the dated stock-price and company-metadata snapshots, rebuild
+the industry tables with:
+
+```bash
+python3 scripts/build_stock_industry_tables_notebook.py
+
+PYTHONNOUSERSITE=1 uv run --isolated --with 'numpy<2' --with pandas --with yfinance \
+  python scripts/fetch_yahoo_bank_history.py --as-of YYYY-MM-DD --years 10
+
+python3 scripts/build_banking_sector_overview_notebook.py
+
+uv run --with yfinance --with pandas \
+  python scripts/fetch_yahoo_bank_quarterly.py --as-of YYYY-MM-DD --metadata-date YYYY-MM-DD --top 15
+
+python3 scripts/build_bank_quarterly_progress_notebook.py
+```
+
+The industry notebook uses Yahoo sector and industry labels, not official
+IDX-IC classifications, and reads the bulk Yahoo snapshots from the ignored
+`private/` directory.
